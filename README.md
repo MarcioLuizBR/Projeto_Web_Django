@@ -1,4 +1,4 @@
-# Projeto_WEB_PYTHON
+# Projeto_WEB_Django
 
 
 ## Desenvolvimento Web com Python
