@@ -6,6 +6,15 @@ HomeFilmes Hashflix
 {% endblock %}
 
 {% block head %}
+<script>
+    function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+</script>
+  
 <style>
   /* Substitua as variáveis SCSS */
   .item {
@@ -85,18 +94,18 @@ HomeFilmes Hashflix
     <section class="h-screen relative bg-no-repeat pb-8 pl-6 flex items-end bg-cover">
         <!-- Imagem de fundo -->
         <div class="absolute inset-0">
-            <img src="{% static 'images/python.png' %}" class="w-full h-full object-cover" alt="Background Image">
+            <img src="{{ filme_destaque.thumb.url }}" class="w-full h-full object-cover" alt="Background Image">
             <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
         </div>
         <div class="relative z-10">
             <h2 class="text-6xl font-semibold text-white my-4">
-                Titulo
+                {{ filme_destaque.titulo }}
             </h2>
             <p class="w-11/12 md:w-5/12 font-medium text-white my-4">
-                Descrição
+                {{ filme_destaque.descricao }}
             </p>
             <div class="flex my-4">
-                <a href="#">
+                <a href="{% url 'filme:detalhesfilme' filme_destaque.pk %}">
                     <button class="flex items-center bg-white py-2 px-5 rounded-md hover:bg-gray-200 transition-colors" style="color:black;">
                         <ion-icon name="play" class="text-2xl"></ion-icon>
                         <span class="ml-3 font-medium">Play</span>
@@ -113,7 +122,7 @@ HomeFilmes Hashflix
             </h2>
             <div class="wrapper">
               <section id="section1" class="flex flex-nowrap items-center justify-center space-x-8">
-                <a href="#section2" class="arrow__btn text-6xl page">‹</a>
+                <a href="#section2" class="arrow__btn text-6xl" onclick="scrollToSection('section2')">›</a>
                     {% for filme in lista_filmes_recentes %}
                         {% if forloop.counter < 5 %}
                         <div class="item h-64 w-1/4 m-4">
@@ -123,11 +132,11 @@ HomeFilmes Hashflix
                         </div>
                         {% endif %}
                     {% endfor %}
-                <a href="#section2" class="arrow__btn text-6xl">›</a>
+                <a href="#section2" class="arrow__btn text-6xl" onclick="scrollToSection('section2')">›</a>
               </section>
             {% if lista_filmes_recentes|length > 4 %}
                   <section id="section2" class="flex flex-nowrap items-center justify-center">
-                    <a href="#section1" class="arrow__btn text-6xl">‹</a>
+                    <a href="#section1" class="arrow__btn text-6xl" onclick="scrollToSection('section1')">‹</a>
                         {% for filme in lista_filmes_recentes %}
                             {% if forloop.counter > 4 %}
                             <div class="item h-64 w-1/4 m-4">
@@ -137,7 +146,7 @@ HomeFilmes Hashflix
                             </div>
                             {% endif %}
                         {% endfor %}
-                    <a href="#section1" class="arrow__btn text-6xl">›</a>
+                        <a href="#section1" class="arrow__btn text-6xl" onclick="scrollToSection('section1')">‹</a>
                   </section>
             {% endif %}
             </div>
