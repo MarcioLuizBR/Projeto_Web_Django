@@ -5,6 +5,81 @@
 HomeFilmes Hashflix
 {% endblock %}
 
+{% block head %}
+<style>
+  /* Substitua as variáveis SCSS */
+  .item {
+    transition: all 250ms; /* Troque $duration por 250ms */
+  }
+  .item:hover {
+    transform: scale(1.2); /* Troque $itemGrow por 1.2 */
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background-color: #000;
+  }
+
+  h1 {
+    font-family: Arial;
+    color: red;
+    text-align: center;
+  }
+
+  .wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 100%);
+    overflow: hidden;
+    scroll-behavior: smooth;
+  }
+
+  .wrapper section {
+    width: 100%;
+    position: relative;
+    margin: 20px 0;
+  }
+
+  .wrapper section .item {
+    padding: 0 2px;
+    transition: all 250ms;
+  }
+
+  .wrapper section .item:hover {
+    margin: 0 40px;
+    transform: scale(1.2);
+  }
+
+  .wrapper section > a:first-child {
+    position: absolute;
+    left: 0;
+    background: linear-gradient(-90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+  }
+
+  .wrapper section > a:last-child {
+    position: absolute;
+    right: 0;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+  }
+
+  .wrapper section .item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  @media only screen and (max-width: 600px) {
+    a.arrow__btn {
+      display: none;
+    }
+  }
+</style>
+{% endblock %}
+
+
 {% block content %}
 <main class="bg-primary_black min-h-screen w-full">
     <section class="h-screen relative bg-no-repeat pb-8 pl-6 flex items-end bg-cover">
@@ -39,47 +114,75 @@ HomeFilmes Hashflix
             <div class="wrapper">
               <section id="section1" class="flex flex-nowrap items-center justify-center space-x-8">
                 <a href="#section2" class="arrow__btn text-6xl page">‹</a>
-                  <div class="item h-64 w-1/4 m-4">
-                      <a href="#">
-                        <img src="#" class="rounded-md w-full h-full object-cover">
-                      </a>
-                  </div>
-                    <a href="#section2" class="arrow__btn text-6xl">›</a>
+                    {% for filme in lista_filmes_recentes %}
+                        {% if forloop.counter < 5 %}
+                        <div class="item h-64 w-1/4 m-4">
+                            <a href="{% url 'filme:detalhesfilme' filme.pk %}">
+                                <img src="{{ filme.thumb.url }}" class="rounded-md w-full h-full object-cover">
+                            </a>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                <a href="#section2" class="arrow__btn text-6xl">›</a>
               </section>
+            {% if lista_filmes_recentes|length > 4 %}
                   <section id="section2" class="flex flex-nowrap items-center justify-center">
                     <a href="#section1" class="arrow__btn text-6xl">‹</a>
-                      <div class="item h-64 w-1/4 m-4">
-                          <a href="#">
-                            <img src="#" class="rounded-md w-full h-full object-cover">
-                          </a>
-                      </div>
+                        {% for filme in lista_filmes_recentes %}
+                            {% if forloop.counter > 4 %}
+                            <div class="item h-64 w-1/4 m-4">
+                                <a href="{% url 'filme:detalhesfilme' filme.pk %}">
+                                    <img src="{{ filme.thumb.url }}" class="rounded-md w-full h-full object-cover">
+                                </a>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
                     <a href="#section1" class="arrow__btn text-6xl">›</a>
                   </section>
+            {% endif %}
             </div>
         </div>
     </section>
 
+    <section class='bg-primary_black flex justify-center py-10'>
+        <div class="p-8 w-10/12 relative" >
+            <h2 class="text-gray-200 text-2xl font-medium">
+                Em Alta
+            </h2>
+            <div class="wrapper">
+              <section id="section1emalta" class="flex flex-nowrap items-center justify-center space-x-8">
+                <a href="#section2emalta" class="arrow__btn text-6xl page">‹</a>
+                    {% for filme in lista_filmes_emalta %}
+                        {% if forloop.counter < 5 %}
+                        <div class="item h-64 w-1/4 m-4">
+                            <a href="{% url 'filme:detalhesfilme' filme.pk %}">
+                                <img src="{{ filme.thumb.url }}" class="rounded-md w-full h-full object-cover">
+                            </a>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                <a href="#section2emalta" class="arrow__btn text-6xl">›</a>
+              </section>
+            {% if lista_filmes_emalta|length > 4 %}
+                  <section id="section2emalta" class="flex flex-nowrap items-center justify-center">
+                    <a href="#section1emalta" class="arrow__btn text-6xl">‹</a>
+                        {% for filme in lista_filmes_emalta %}
+                            {% if forloop.counter > 4 %}
+                            <div class="item h-64 w-1/4 m-4">
+                                <a href="{% url 'filme:detalhesfilme' filme.pk %}">
+                                    <img src="{{ filme.thumb.url }}" class="rounded-md w-full h-full object-cover">
+                                </a>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    <a href="#section1emalta" class="arrow__btn text-6xl">›</a>
+                  </section>
+            {% endif %}
+            </div>
+        </div>
+    </section>
+
+
 </main>
-
-
-
-
-
-<div class="py-10">
-    <h1>Essa é a nossa home filmes</h1>
-    {% for filme in object_list %}
-    <hr>
-    <a href="{% url 'filme:detalhesfilme' filme.pk %}"><p>{{ filme.titulo }}</p></a>
-    <p>{{ filme.descricao }}</p>
-    <img src="{{ filme.thumb.url }}">
-    {% endfor %}
-</div>
-<div class="py-10">
-    <h2>Novo</h2>
-    {{ lista_filmes_recentes }}
-</div>
-<div class="py-10">
-    <h2>Em Alta</h2>
-    {{ lista_filmes_emalta }}
-</div>
 {% endblock %}
+
