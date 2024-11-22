@@ -1,27 +1,20 @@
 from django.shortcuts import render
 from .models import Filme
 from django.views.generic import TemplateView, ListView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-# Create your views here.
-# def homepage(request):
-#     return render(request, "homepage.html")
 
-# def homefilmes(request):
-#     context = {}
-#     lista_filmes = Filme.objects.all()
-#     context['lista_filmes'] = lista_filmes
-#     return render(request, "homefilmes.html", context)
 
 class Homepage(TemplateView):
     template_name = "homepage.html"
 
 
-class Homefilmes(ListView):
+class Homefilmes(LoginRequiredMixin, ListView):
     template_name = "homefilmes.html"
     model = Filme
     # object_list
     
-class Detalhesfilme(DetailView):
+class Detalhesfilme(LoginRequiredMixin, DetailView):
     template_name = "detalhesfilme.html"
     model = Filme
     
@@ -30,6 +23,8 @@ class Detalhesfilme(DetailView):
         filme = self.get_object()
         filme.visualizacoes += 1
         filme.save()
+        usuario = request.user
+        usuario.filmes_vistos.add(filme)
         return super().get(request, *args, **kwargs) # redireciona o ususario para a url final
     
     def get_context_data(self, **kwargs):
@@ -39,7 +34,7 @@ class Detalhesfilme(DetailView):
         context["filmes_relacionados"] = filmes_relacionados
         return context
 
-class Pesquisafilme(ListView):
+class Pesquisafilme(LoginRequiredMixin, ListView):
     template_name = "pesquisa.html"
     model = Filme
     
@@ -50,3 +45,23 @@ class Pesquisafilme(ListView):
             return object_list
         else:
             return None
+        
+
+
+
+
+
+
+
+
+
+
+# Create your views here.
+# def homepage(request):
+#     return render(request, "homepage.html")
+
+# def homefilmes(request):
+#     context = {}
+#     lista_filmes = Filme.objects.all()
+#     context['lista_filmes'] = lista_filmes
+#     return render(request, "homefilmes.html", context)
