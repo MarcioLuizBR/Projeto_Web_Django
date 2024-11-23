@@ -89,12 +89,11 @@ HomePage Hashflix
             <img src="{% static 'images\netflix_kid.png' %}" class="w-8/12" alt="">
         </div>
     </section>
-    <footer class=" px-5 py-10 ">
-        <ul class="flex justify-between items-center">
-            
-            <li>&copy; 2021</li>
-            <li> Feito com Python (Django)</li>
-            <li>Hashtag</li>
+    <footer class="px-5 py-10 bg-gray-800 text-gray-300">
+        <ul class="flex flex-col md:flex-row justify-between items-center text-center">
+            <li>&copy; {% now "Y" %}</li>
+            <li>Feito com Python (Django)</li>
+            <li>Hashtag Treinamentos</li>
         </ul>
     </footer>
 {% endblock %}
